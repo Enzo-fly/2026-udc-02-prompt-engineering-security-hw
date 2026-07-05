@@ -60,13 +60,17 @@ export function parseAmount(input: string): number {
  * Each share is `floor(totalCents / n)` or one cent more; the first
  * `totalCents % n` shares receive the extra cent so the sum equals `totalCents`.
  *
- * @param totalCents - Total amount in cents to distribute.
+ * @param totalCents - Total amount in cents to distribute (non-negative).
  * @param n - Number of shares (length of the returned array).
  * @returns Array of `n` integer-cent values.
+ * @throws {Error} `totalCents must be non-negative, got ${totalCents}` when `totalCents` is negative.
  * @example
  * splitEvenly(100, 3); // => [34, 33, 33]
  */
 export function splitEvenly(totalCents: number, n: number): number[] {
+  if (totalCents < 0) {
+    throw new Error(`totalCents must be non-negative, got ${totalCents}`);
+  }
   const base = Math.floor(totalCents / n);
   const remainder = totalCents % n;
   return Array.from({ length: n }, (_, i) => base + (i < remainder ? 1 : 0));
@@ -83,7 +87,7 @@ export function splitEvenly(totalCents: number, n: number): number[] {
  * applyDiscount(10000, 10); // => 9000
  */
 export function applyDiscount(cents: number, percent: number): number {
-  if (percent < 0 || percent > 100) {
+  if (!Number.isFinite(percent) || percent < 0 || percent > 100) {
     throw new Error(`percent must be between 0 and 100, got ${percent}`);
   }
   return Math.round(cents * (1 - percent / 100));

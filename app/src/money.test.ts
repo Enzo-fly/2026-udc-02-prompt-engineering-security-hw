@@ -73,6 +73,10 @@ describe("splitEvenly", () => {
     expect(splitEvenly(100, 0)).toEqual([]);
   });
 
+  it("rejects negative totalCents", () => {
+    expect(() => splitEvenly(-100, 3)).toThrow(/non-negative/i);
+  });
+
   it("parts sum to the original total for positive amounts", () => {
     const total = 10007;
     const n = 8;
@@ -105,5 +109,9 @@ describe("applyDiscount", () => {
 
   it("rejects percent above 100", () => {
     expect(() => applyDiscount(10000, 101)).toThrow(/percent/i);
+  });
+
+  it("rejects non-finite percent", () => {
+    expect(() => applyDiscount(10000, NaN)).toThrow(/percent/i);
   });
 });

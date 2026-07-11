@@ -153,38 +153,25 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 
 Блок тестує `splitEvenly` — поділ загальної суми в центах на `n` часток.
 
-#### `splits a cleanly divisible total`
+#### `distributes remainder cents to the first shares`
 
 | Поле | Значення |
 |------|----------|
 | **Target** | `splitEvenly` |
 | **Setup** | none |
-| **Inputs** | `totalCents: number` = `9000`, `n: number` = `3` |
+| **Inputs** | `totalCents: number` = `100`, `n: number` = `3` |
 | **Assertion** | `expect(...).toEqual(...)` |
-| **Expected** | `number[]` = `[3000, 3000, 3000]` |
+| **Expected** | `number[]` = `[34, 33, 33]` |
 
-#### `distributes remainder cents to first shares`
+#### `splits evenly when there is no remainder`
 
 | Поле | Значення |
 |------|----------|
 | **Target** | `splitEvenly` |
-| **Setup** | `const shares = splitEvenly(100, 3)` |
-
-**Assertion 1**
-
-| Поле | Значення |
-|------|----------|
-| **Inputs** | (через `shares`) `totalCents` = `100`, `n` = `3` |
-| **Assertion** | `expect(shares).toEqual(...)` |
-| **Expected** | `number[]` = `[34, 33, 33]` |
-
-**Assertion 2**
-
-| Поле | Значення |
-|------|----------|
-| **Inputs** | `shares.reduce((a, b) => a + b, 0)` |
-| **Assertion** | `expect(...).toBe(...)` |
-| **Expected** | `number` = `100` |
+| **Setup** | none |
+| **Inputs** | `totalCents: number` = `90`, `n: number` = `3` |
+| **Assertion** | `expect(...).toEqual(...)` |
+| **Expected** | `number[]` = `[30, 30, 30]` |
 
 #### `returns a single share when n is 1`
 
@@ -192,19 +179,82 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 |------|----------|
 | **Target** | `splitEvenly` |
 | **Setup** | none |
-| **Inputs** | `totalCents: number` = `500`, `n: number` = `1` |
+| **Inputs** | `totalCents: number` = `42800`, `n: number` = `1` |
 | **Assertion** | `expect(...).toEqual(...)` |
-| **Expected** | `number[]` = `[500]` |
+| **Expected** | `number[]` = `[42800]` |
 
-#### `handles zero total`
+#### `returns all zeros when total is zero`
 
 | Поле | Значення |
 |------|----------|
 | **Target** | `splitEvenly` |
 | **Setup** | none |
-| **Inputs** | `totalCents: number` = `0`, `n: number` = `3` |
+| **Inputs** | `totalCents: number` = `0`, `n: number` = `4` |
 | **Assertion** | `expect(...).toEqual(...)` |
-| **Expected** | `number[]` = `[0, 0, 0]` |
+| **Expected** | `number[]` = `[0, 0, 0, 0]` |
+
+#### `gives at most one extra cent per share when cents < n`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `splitEvenly` |
+| **Setup** | none |
+| **Inputs** | `totalCents: number` = `2`, `n: number` = `5` |
+| **Assertion** | `expect(...).toEqual(...)` |
+| **Expected** | `number[]` = `[1, 1, 0, 0, 0]` |
+
+#### `puts a single cent into the first share only`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `splitEvenly` |
+| **Setup** | none |
+| **Inputs** | `totalCents: number` = `1`, `n: number` = `3` |
+| **Assertion** | `expect(...).toEqual(...)` |
+| **Expected** | `number[]` = `[1, 0, 0]` |
+
+#### `returns an empty array when n is 0`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `splitEvenly` |
+| **Setup** | none |
+| **Inputs** | `totalCents: number` = `100`, `n: number` = `0` |
+| **Assertion** | `expect(...).toEqual(...)` |
+| **Expected** | `number[]` = `[]` |
+
+#### `rejects negative totalCents`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `splitEvenly` |
+| **Setup** | none |
+| **Inputs** | `totalCents: number` = `-100`, `n: number` = `3` (у стрілковій функції) |
+| **Assertion** | `expect(() => ...).toThrow(...)` |
+| **Expected** | regex `/non-negative/i` |
+
+#### `parts sum to the original total for positive amounts`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `splitEvenly` |
+| **Setup** | `const parts = splitEvenly(10007, 8)` |
+
+**Assertion 1**
+
+| Поле | Значення |
+|------|----------|
+| **Inputs** | `parts.reduce((sum, part) => sum + part, 0)` |
+| **Assertion** | `expect(...).toBe(...)` |
+| **Expected** | `number` = `10007` |
+
+**Assertion 2**
+
+| Поле | Значення |
+|------|----------|
+| **Inputs** | `parts` |
+| **Assertion** | `expect(parts).toHaveLength(...)` |
+| **Expected** | `8` |
 
 ---
 
@@ -269,6 +319,16 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 | **Target** | `applyDiscount` |
 | **Setup** | none |
 | **Inputs** | `cents: number` = `10000`, `percent: number` = `101` (у стрілковій функції) |
+| **Assertion** | `expect(() => ...).toThrow(...)` |
+| **Expected** | regex `/percent/i` |
+
+#### `rejects non-finite percent`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `applyDiscount` |
+| **Setup** | none |
+| **Inputs** | `cents: number` = `10000`, `percent: number` = `NaN` (у стрілковій функції) |
 | **Assertion** | `expect(() => ...).toThrow(...)` |
 | **Expected** | regex `/percent/i` |
 

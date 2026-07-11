@@ -14,12 +14,12 @@
 
 - **Задача:** додати edge-case тести для `splitEvenly` у `app/src/money.test.ts`.
 - **Що зробив (після):** вузький промпт з явним scope:
-  ```
+  ```text
   Додай edge-case тести в @app/src/money.test.ts для splitEvenly.
   Дивись лише @app/src/money.ts і @app/AGENTS.md. Не чіпай інші файли.
   ```
 - **Базовий варіант (до курації):** короткий промпт без `@file` і без обмеження scope:
-  ```
+  ```text
   Додай тести для метода splitEvenly
   ```
 

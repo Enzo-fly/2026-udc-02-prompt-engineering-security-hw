@@ -19,7 +19,7 @@ add-tests → debug-failing-test → fix-prod-code → refactor-money / add-jsdo
 review-security / review-pr (окремо, review only)
 ```
 
-## Індекс (11 власних + 1 зразок)
+## Індекс (10 власних + 1 зразок)
 
 | Промпт | Категорія | Ціль | Команда | Verified |
 |--------|-----------|------|---------|----------|

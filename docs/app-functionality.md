@@ -18,7 +18,7 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 |---------|-----------|----------|---------------|
 | `formatCents` | `cents: number` | `string` | Ні |
 | `parseAmount` | `input: string` | `number` | Так — невалідний рядок |
-| `splitEvenly` | `totalCents: number`, `n: number` | `number[]` | Ні |
+| `splitEvenly` | `totalCents: number`, `n: number` | `number[]` | Так — від'ємний `totalCents` |
 | `applyDiscount` | `cents: number`, `percent: number` | `number` | Так — `percent` поза 0–100 |
 
 ---
@@ -114,7 +114,7 @@ export function splitEvenly(totalCents: number, n: number): number[]
 
 | Параметр | Тип | Опис |
 |----------|-----|------|
-| `totalCents` | `number` | Загальна сума в центах для розподілу. |
+| `totalCents` | `number` | Загальна сума в центах для розподілу (невід'ємна). |
 | `n` | `number` | Кількість часток (людей); довжина результуючого масиву. |
 
 **Returns**
@@ -125,14 +125,14 @@ export function splitEvenly(totalCents: number, n: number): number[]
 
 **Throws**
 
-Не кидає помилок (валідація `n` у коді not specified).
+- Якщо `totalCents < 0`: `Error` з повідомленням `` `totalCents must be non-negative, got ${totalCents}` ``.
 
 **Behavior**
 
+- Спочатку перевірка: `totalCents` має бути невід'ємним.
 - `base = Math.floor(totalCents / n)`.
 - `remainder = totalCents % n`.
-- Повертається масив довжини `n`: для індексів `i < remainder` значення `base + 1`, інакше `base`.
-- У JSDoc зазначено відому прогалину щодо remainder cents; реалізація розподіляє залишок на перші `remainder` часток (implementation detail).
+- Повертається масив довжини `n`: для індексів `i < remainder` значення `base + 1`, інакше `base` — залишок розподіляється на перші `remainder` часток.
 
 **Examples**
 
@@ -186,6 +186,7 @@ export function applyDiscount(cents: number, percent: number): number
 | Повідомлення | Функція | Умова |
 |--------------|---------|--------|
 | `` Not a valid amount: ${input} `` | `parseAmount` | Рядок не збігається з `/^(-?)(\d+)(?:\.(\d{1,2}))?$/` після `trim` |
+| `` totalCents must be non-negative, got ${totalCents} `` | `splitEvenly` | `totalCents < 0` |
 | `` percent must be between 0 and 100, got ${percent} `` | `applyDiscount` | `percent < 0` або `percent > 100` |
 
 ## Types & conventions
@@ -193,7 +194,7 @@ export function applyDiscount(cents: number, percent: number): number
 - **`number` як центи** — усі грошові величини в API (`formatCents`, `splitEvenly`, `applyDiscount`) та результат `parseAmount` — цілі центи.
 - **Рядок суми** (`parseAmount`) — опційний `-`, цілі одиниці, опційна крапка і 1–2 десяткові цифри (долари/гривні в «людському» вигляді, не центи).
 - **Рядок відображення** (`formatCents`) — `"<ціла>.<дві цифри>"`, для від'ємних — префікс `-`.
-- **`splitEvenly`** — масив завжди має довжину `n`; сума елементів дорівнює `totalCents` при `n > 0` (implementation detail з коду розподілу остачі).
+- **`splitEvenly`** — масив завжди має довжину `n`; для невід'ємного `totalCents` і `n > 0` сума елементів дорівнює `totalCents`.
 - **Знижка** — `percent` у відсотках 0–100; результат округлюється до цілого цента.
 
 ## Generated

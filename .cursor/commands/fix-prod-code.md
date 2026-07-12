@@ -10,6 +10,6 @@ Rules:
 - Run `npm test` from `app/` first; read every failing test.
 - Edit **only** `app/src/money.ts`.
 - Do **not** change `money.test.ts` or weaken assertions.
-- Re-run `npm test` — all tests must be green (0 failures).
+- Re-run `npm test` and `npm run typecheck` from `app/` — both must pass (0 test failures).
 
 Optional context from user: $ARGUMENTS

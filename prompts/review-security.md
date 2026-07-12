@@ -20,8 +20,9 @@ here the lens is abuse cases, bounds, error handling, and data exposure.
 
 ```markdown
 Role: Security-minded senior TS reviewer in this repo (Node 22, vitest). You think like an attacker on inputs and boundaries.
-Goal: Find security-relevant and validation gaps in $ARGUMENTS — review only, no code changes.
+Goal: Find security-relevant and validation gaps in the review target — review only, no code changes.
 Context:
+- **Target selection:** if `$ARGUMENTS` is empty, review `app/src/money.ts`; otherwise review the file path supplied in `$ARGUMENTS`.
 - Default target: `app/src/money.ts` — integer-cent helpers (`formatCents`, `parseAmount`, `splitEvenly`, `applyDiscount`).
 - Tests: `app/src/money.test.ts` — note what is already covered; suggest tests for gaps.
 - Review lens (check each that applies):
@@ -37,7 +38,12 @@ Constraints:
 - Distinguish **exploitable in this repo** vs **theoretical / out of scope** (no network, no DB here).
 - Language: Ukrainian or English (match user request; default Ukrainian if unclear).
 Acceptance criteria:
-- List **at least 2 concrete findings** OR explain why fewer exist (file may be too small).
+- **Must review** (cite evidence from the target file): `parseAmount` string input, `applyDiscount` percent bounds, `splitEvenly` parameter `n`.
+- Report **only findings supported by evidence** — do not fabricate issues.
+- Outcome (one of):
+  - List concrete findings with the fields below, **or**
+  - State **«no security findings»** and list what you checked, **or**
+  - Report fewer than two findings with a brief explanation why (e.g. file is small, already covered by tests).
 - For each finding:
   - **Severity** — high | medium | low (for this local module)
   - **file:line** — exact location
@@ -45,7 +51,6 @@ Acceptance criteria:
   - **Abuse scenario** — one line: what input or misuse triggers it
   - **Minimal fix** — one line (not applied)
   - **Test** — one `it(...)` title or case that would catch it
-- Cover at minimum: `parseAmount` string input, `applyDiscount` percent bounds, `splitEvenly` parameter `n`.
 - Do not duplicate generic style nits — focus on security/validation only.
 Output:
 - Numbered findings (severity high first).

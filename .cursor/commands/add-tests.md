@@ -9,7 +9,7 @@ Target: `app/src/money.ts` / `app/src/money.test.ts`.
 Rules:
 - Edit **only** `app/src/money.test.ts`.
 - Do **not** change `money.ts` or other files.
-- Run `npm test` from `app/` when done.
+- Run `npm test` and `npm run typecheck` from `app/` when done.
 - If tests fail due to a production bug → stop with a bug report; do not fix `money.ts` (use `/fix-prod-code` next).
 
 Optional context from user: $ARGUMENTS

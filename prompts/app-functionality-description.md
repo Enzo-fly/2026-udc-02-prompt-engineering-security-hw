@@ -26,7 +26,7 @@ Context:
 - Module: integer-cent money helpers (`formatCents`, `parseAmount`, `splitEvenly`, `applyDiscount`).
 - Derive purpose, types, behavior, errors, and examples from: exported signatures, JSDoc comments, and implementation logic in `money.ts`.
 - Convention (from source comments): all monetary amounts are **integer cents** unless noted otherwise.
-- Import in other files: `import { … } from "./money.js"` (ESM, `.js` extension).
+- Prompt metadata (not a rule from `money.ts`): if you mention how other files import the module, use `import { … } from "./money.js"` (ESM, `.js` extension). Do not treat that path as documented behavior in the source.
 Constraints:
 - Create or overwrite ONLY `docs/app-functionality.md`. Do NOT change `money.ts` or any other file.
 - Read ONLY `app/src/money.ts` — do NOT open `money.test.ts`, `README.md`, or other repo files for behavior or examples.
@@ -71,8 +71,9 @@ Overwrite only docs/app-functionality.md. Do not open tests or README.
 </instructions>
 
 <context>
-Sole source: app/src/money.ts — formatCents, parseAmount, splitEvenly, applyDiscount.
-Integer cents per module comments. ESM import from ./money.js.
+Sole source for behavior: app/src/money.ts — formatCents, parseAmount, splitEvenly, applyDiscount.
+Integer cents per module comments.
+Prompt metadata (not from money.ts): ESM import from ./money.js.
 </context>
 
 <constraints>

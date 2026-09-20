@@ -24,8 +24,8 @@ Goal: Find security-relevant and validation gaps in the review target — review
 Context:
 - **Target selection:** if `$ARGUMENTS` is empty, review `app/src/money.ts`; otherwise review the file path supplied in `$ARGUMENTS`.
 - Default target: `app/src/money.ts` — integer-cent helpers (`formatCents`, `parseAmount`, `splitEvenly`, `applyDiscount`).
-- Tests: `app/src/money.test.ts` — note what is already covered; suggest tests for gaps.
-- Review lens (check each that applies):
+- Tests: `app/src/money.test.ts` — note what is already covered **when the default target is used**; for another file, only cite tests that exist for that target. Do not require symbols or tests absent from the selected file.
+- Review lens (check each that applies **to exports present in the selected target**):
   - **Input validation** — out-of-range numbers, invalid strings, missing bounds (`percent`, `n`, extreme `cents`).
   - **Error handling** — do throws leak useful attack info? are messages consistent with tests?
   - **Injection / parsing** — can `parseAmount` be abused with unexpected strings (not code injection — this is local parsing)?
@@ -38,7 +38,7 @@ Constraints:
 - Distinguish **exploitable in this repo** vs **theoretical / out of scope** (no network, no DB here).
 - Language: Ukrainian or English (match user request; default Ukrainian if unclear).
 Acceptance criteria:
-- **Must review** (cite evidence from the target file): `parseAmount` string input, `applyDiscount` percent bounds, `splitEvenly` parameter `n`.
+- **Must review** (cite evidence from the target file): for `formatCents`, `parseAmount`, `applyDiscount` percent bounds, and `splitEvenly` parameter `n` — **only if that symbol is exported from the selected target**. If `$ARGUMENTS` points to another file, apply the same lens to its actual exports; do not invent or require missing helpers.
 - Report **only findings supported by evidence** — do not fabricate issues.
 - Outcome (one of):
   - List concrete findings with the fields below, **or**
@@ -75,8 +75,11 @@ At least 2 findings or justify fewer. No secrets/PII in output.
 
 <context>
 Default: app/src/money.ts — formatCents, parseAmount, splitEvenly, applyDiscount.
-Tests: app/src/money.test.ts. Local module — no network/DB. Check parseAmount
-strings, applyDiscount percent bounds, splitEvenly n edge cases, error messages.
+If $ARGUMENTS names another file, review that file only; do not require money.ts
+symbols or money.test.ts cases unless they exist on the selected target.
+Tests: app/src/money.test.ts when reviewing the default target. Local module —
+no network/DB. When present: check parseAmount strings, applyDiscount percent
+bounds, splitEvenly n edge cases, error messages.
 </context>
 
 <constraints>

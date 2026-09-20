@@ -38,7 +38,7 @@ Acceptance criteria:
   - `parseAmount`: single fractional digit, negatives, trimmed whitespace; invalid input throws matching `/Not a valid amount/`
   - `splitEvenly`: remainder distribution per rule above (assert exact array + sum === total), `n=1`, zero total
   - `applyDiscount`: 0%, 100%, rounding to nearest cent; out-of-range percent throws matching `/percent/i`
-- Run `npm test` from `app/` directory.
+- Run `npm test` and `npm run typecheck` from `app/` directory; both must exit 0.
 - If ALL new tests pass → done.
 - If any new test fails due to a production bug in `money.ts` → do NOT weaken the assertion, do NOT fix `money.ts`; stop and report (see Output).
 Output:
@@ -56,7 +56,8 @@ Stop rules (override "all tests pass" when applicable):
 <instructions>
 You are a senior TS test author (Node 22, vitest). Extend app/src/money.test.ts
 with edge-case coverage for app/src/money.ts — assert expected behavior, not bugs.
-Edit only money.test.ts. Run npm test from app/ before finishing.
+Edit only money.test.ts. Run npm test and npm run typecheck from app/ before
+finishing; both must exit 0.
 If all tests pass → done. If a test fails due to a production bug → do NOT weaken
 assertions or fix money.ts; stop and report per output_format.
 </instructions>

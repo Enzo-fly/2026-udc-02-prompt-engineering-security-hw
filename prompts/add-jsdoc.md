@@ -101,4 +101,4 @@ JSDoc already adequate.
 
 ## Verified
 
-- [x] Run with tests green; JSDoc added; comments-only diff; `npm test` + `typecheck` still green (18/18)
+- [x] Run with tests green; JSDoc added; comments-only diff; `npm test` + `typecheck` still green

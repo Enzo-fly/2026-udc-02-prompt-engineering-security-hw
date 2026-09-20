@@ -114,6 +114,6 @@ cd app && npm install && npm test && cd ..
 
 Документ згенеровано промптом `prompts/environment-description.md`.
 
-**Версії перевірено:** `npm list --depth=0` у `app/`; діапазони — з `app/package.json`; `npm test` (18 тестів) і `npm run typecheck` — успішно.
+**Версії перевірено:** `npm list --depth=0` у `app/`; діапазони — з `app/package.json`; `npm test` (27 тестів) і `npm run typecheck` — успішно.
 
 **Примітка:** `app/package-lock.json` існує локально, але не читався напряму; встановлені версії взяті з виводу `npm list`.

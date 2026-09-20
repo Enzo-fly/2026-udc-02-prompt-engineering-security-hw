@@ -23,7 +23,7 @@ Role: Senior TS engineer in this repo (Node 22, vitest). You refactor safely —
 Goal: Improve structure and readability of `app/src/money.ts` **without** changing public API or runtime behavior.
 Context:
 - Module: `app/src/money.ts` — integer-cent helpers: `formatCents`, `parseAmount`, `splitEvenly`, `applyDiscount`.
-- Tests: `app/src/money.test.ts` — 18 cases; all must pass before and after refactor.
+- Tests: `app/src/money.test.ts` — 27 cases; all must pass before and after refactor.
 - Run `npm test` and `npm run typecheck` from `app/` **before** editing; re-run both **after**.
 - Suggested refactor targets (pick 1–3 that add clarity; do not do all if unnecessary):
   - Remove or update **stale JSDoc** on `splitEvenly` (outdated «correctness gap» note if behavior is fixed).
@@ -100,4 +100,4 @@ API/export/test changes needed; behavior change required for "cleanliness".
 
 ## Verified
 
-- [x] Run with all tests green; refactor applied; `npm test` + `typecheck` still green (18/18); API unchanged; `money.ts` reverted after verification
+- [x] Run with all tests green; refactor applied; `npm test` + `typecheck` still green (27/27); API unchanged; `money.ts` reverted after verification

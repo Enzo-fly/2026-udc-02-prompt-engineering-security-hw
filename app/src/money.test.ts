@@ -77,6 +77,21 @@ describe("splitEvenly", () => {
     expect(() => splitEvenly(-100, 3)).toThrow(/non-negative/i);
   });
 
+  it("rejects fractional totalCents", () => {
+    expect(() => splitEvenly(10.5, 2)).toThrow(/finite integer/i);
+  });
+
+  it("rejects fractional n", () => {
+    expect(() => splitEvenly(100, 2.5)).toThrow(/finite integer/i);
+  });
+
+  it("rejects non-numeric inputs", () => {
+    expect(() => splitEvenly(Number.NaN, 3)).toThrow(/finite integer/i);
+    expect(() => splitEvenly(100, Number.NaN)).toThrow(/finite integer/i);
+    expect(() => splitEvenly(Number.POSITIVE_INFINITY, 3)).toThrow(/finite integer/i);
+    expect(() => splitEvenly(100, Number.POSITIVE_INFINITY)).toThrow(/finite integer/i);
+  });
+
   it("parts sum to the original total for positive amounts", () => {
     const total = 10007;
     const n = 8;

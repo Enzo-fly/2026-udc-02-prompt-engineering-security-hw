@@ -59,15 +59,26 @@ export function parseAmount(input: string): number {
  *
  * Each share is `floor(totalCents / n)` or one cent more; the first
  * `totalCents % n` shares receive the extra cent so the sum equals `totalCents`.
+ * When `n` is `0`, returns `[]` and that sum guarantee does not apply.
  *
- * @param totalCents - Total amount in cents to distribute (non-negative).
- * @param n - Number of shares (length of the returned array).
- * @returns Array of `n` integer-cent values.
+ * @param totalCents - Total amount in cents to distribute (non-negative finite integer).
+ * @param n - Number of shares (length of the returned array); `0` yields `[]`.
+ * @returns Array of `n` integer-cent values (`[]` when `n` is `0`).
+ * @throws {Error} `totalCents must be a finite integer, got ${totalCents}` when `totalCents` is not a finite integer.
+ * @throws {Error} `n must be a finite integer, got ${n}` when `n` is not a finite integer.
  * @throws {Error} `totalCents must be non-negative, got ${totalCents}` when `totalCents` is negative.
  * @example
  * splitEvenly(100, 3); // => [34, 33, 33]
+ * @example
+ * splitEvenly(100, 0); // => []
  */
 export function splitEvenly(totalCents: number, n: number): number[] {
+  if (!Number.isInteger(totalCents)) {
+    throw new Error(`totalCents must be a finite integer, got ${totalCents}`);
+  }
+  if (!Number.isInteger(n)) {
+    throw new Error(`n must be a finite integer, got ${n}`);
+  }
   if (totalCents < 0) {
     throw new Error(`totalCents must be non-negative, got ${totalCents}`);
   }

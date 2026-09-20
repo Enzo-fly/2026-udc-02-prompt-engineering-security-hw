@@ -46,7 +46,7 @@ for the WS2 sanitization exercise. Do NOT treat as real PII/secrets. Your task
 
 - дата народження: **01.01.1980**
 
-- картка: ** ****-1234** (Visa, exp 01/30, CVV [REDACTED])
+- картка: `****-1234` (Visa, exp 01/30, CVV [REDACTED])
 
 - IBAN: **<IBAN>**
 

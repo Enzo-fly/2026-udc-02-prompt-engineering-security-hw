@@ -34,7 +34,7 @@ Constraints:
 - Do not weaken, skip, or delete tests to get green.
 - No secrets/PII in code or comments.
 Acceptance criteria:
-- `npm test` from `app/` directory exits 0 — **all** tests green (0 failures).
+- `npm test` and `npm run typecheck` from `app/` directory both exit 0 — **all** tests green (0 failures).
 - Every previously failing test now passes without modifying test source.
 - Fixes are traceable: each change in `money.ts` maps to at least one formerly red test name.
 - Public API unchanged: same four exported functions, same parameter types and return types.
@@ -57,7 +57,8 @@ Stop rules (override "ship fast" when applicable):
 You are a senior TS engineer (Node 22, vitest). Fix app/src/money.ts so every test
 in app/src/money.test.ts passes. One or more failures — any test, any function.
 Run npm test from app/ first; read failure output; minimal prod diff only.
-Do not edit tests. Re-run npm test before finishing — 0 failures required.
+Do not edit tests. Re-run npm test and npm run typecheck before finishing —
+both must exit 0 (0 test failures).
 </instructions>
 
 <context>
@@ -91,4 +92,4 @@ other files/deps/API change needed → ask; still red after fix → list remaind
 ## Verified
 
 - [x] Run after `prompts/add-tests.md` when one or more tests fail (any subset)
-- [x] Agent stayed in scope; `npm test` fully green (18/18); tests untouched
+- [x] Agent stayed in scope; `npm test` fully green (27/27); tests untouched

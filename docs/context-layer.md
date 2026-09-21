@@ -35,7 +35,7 @@
 
 **Як міряв:** екран usage контексту в Cursor IDE (context tray) після кожного запиту в одній сесії.
 
-**Результат задачі (обидва варіанти):** 9 тестів у `describe("splitEvenly")`, `npm test` — **24/24** green, змінений лише `money.test.ts`.
+**Результат задачі (обидва варіанти):** історичний вимір Task D (не поточний suite): 9 тестів у `describe("splitEvenly")`, `npm test` — **24/24** green, змінений лише `money.test.ts`. Зараз у `money.test.ts` 27 `it` (з них 12 у `splitEvenly`).
 
 ## Висновок
 

@@ -22,7 +22,8 @@ here the lens is abuse cases, bounds, error handling, and data exposure.
 Role: Security-minded senior TS reviewer in this repo (Node 22, vitest). You think like an attacker on inputs and boundaries.
 Goal: Find security-relevant and validation gaps in the review target — review only, no code changes.
 Context:
-- **Target selection:** if `$ARGUMENTS` is empty, review `app/src/money.ts`; otherwise review the file path supplied in `$ARGUMENTS`.
+- **Target selection:** if `$ARGUMENTS` is empty, review `app/src/money.ts`; otherwise review the path in `$ARGUMENTS` **only if** it is under `app/src/` (no `..` / paths outside that tree).
+- **Reject before reading:** do not open `$ARGUMENTS` that look like secrets — `.env`, `.env.*`, `*.key`, `*.pem` (private keys), or `*secret*` / `*credential*` / `*token*` filenames. Stop and say the path is disallowed.
 - Default target: `app/src/money.ts` — integer-cent helpers (`formatCents`, `parseAmount`, `splitEvenly`, `applyDiscount`).
 - Tests: `app/src/money.test.ts` — note what is already covered **when the default target is used**; for another file, only cite tests that exist for that target. Do not require symbols or tests absent from the selected file.
 - Review lens (check each that applies **to exports present in the selected target**):
@@ -57,6 +58,7 @@ Output:
 - Summary table: severity | file:line | function | one-line issue.
 - Closing: «Ready for `fix-prod-code.md` or `add-tests.md`?» for confirmed gaps.
 Stop rules:
+- `$ARGUMENTS` outside `app/src/` or matching a secret-file pattern → stop; do not read the file.
 - Target file missing or has no exported functions → stop and say so.
 - Findings require editing files to verify → note as hypothesis; do not edit.
 - User asked to fix in this pass → stop; point to `fix-prod-code.md` or `add-tests.md`.
@@ -75,8 +77,11 @@ At least 2 findings or justify fewer. No secrets/PII in output.
 
 <context>
 Default: app/src/money.ts — formatCents, parseAmount, splitEvenly, applyDiscount.
-If $ARGUMENTS names another file, review that file only; do not require money.ts
-symbols or money.test.ts cases unless they exist on the selected target.
+If $ARGUMENTS names another file, review it only when the path is under app/src/.
+Reject before reading: .env, .env.*, *.key, *.pem (private keys), *secret*,
+*credential*, *token* filenames — stop, do not open.
+Do not require money.ts symbols or money.test.ts cases unless they exist on
+the selected target.
 Tests: app/src/money.test.ts when reviewing the default target. Local module —
 no network/DB. When present: check parseAmount strings, applyDiscount percent
 bounds, splitEvenly n edge cases, error messages.
@@ -91,7 +96,8 @@ bounds, splitEvenly n edge cases, error messages.
 
 <output_format>
 Numbered findings (high severity first) + summary table.
-Close: ready for fix-prod-code or add-tests? Stop: no exports; user wants fix now;
+Close: ready for fix-prod-code or add-tests? Stop: path outside app/src/ or
+secret-file pattern (do not read); no exports; user wants fix now;
 only style issues → report what was checked.
 </output_format>
 ```

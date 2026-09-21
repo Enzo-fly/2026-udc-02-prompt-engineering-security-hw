@@ -12,12 +12,12 @@
 import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js";
 ```
 
-**Структура:** 4 блоки `describe`, **24** тест-кейсів `it`.
+**Структура:** 4 блоки `describe`, **27** тест-кейсів `it`.
 
 | Метрика | Значення |
 |---------|----------|
 | `describe` блоків | 4 |
-| `it` кейсів | 24 |
+| `it` кейсів | 27 |
 | Імпортованих функцій | 4 |
 
 ## Suite summary
@@ -26,7 +26,7 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 |-----------------|-------------------|----------------|------|
 | `formatCents` | `formatCents` | 3 | Форматування центів у рядок |
 | `parseAmount` | `parseAmount` | 5 | Парсинг рядка в центи, помилки |
-| `splitEvenly` | `splitEvenly` | 9 | Рівний поділ суми, остача, валідація |
+| `splitEvenly` | `splitEvenly` | 12 | Рівний поділ суми, остача, валідація |
 | `applyDiscount` | `applyDiscount` | 7 | Знижка, округлення, валідація `percent` |
 
 ---
@@ -342,7 +342,7 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 |--------|-------------------|---------------------------|
 | `toBe` | 14 | Строга рівність для примітивів (`number`, `string`) |
 | `toEqual` | 7 | Глибока рівність для масивів (`number[]`) |
-| `toThrow` | 5 | Виклик функції кидає помилку; усі 5 з regex-матчером повідомлення |
+| `toThrow` | 11 | Виклик функції кидає помилку; усі 11 з regex-матчером повідомлення |
 | `toHaveLength` | 1 | Перевірка довжини масиву (`parts`) |
 
 ## Comments in source

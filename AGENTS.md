@@ -56,7 +56,7 @@ Baseline guidance for an Agentic IDE working in **this homework repo**.
 
 ### Least privilege and human-in-the-loop
 
-Require **explicit human confirmation** before:
+Action defaults:
 
 | Action | Examples | Default |
 |---|---|---|

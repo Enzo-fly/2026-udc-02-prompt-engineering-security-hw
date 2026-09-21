@@ -79,16 +79,15 @@
 
 ### Рішення для 🟡-даних (Task B, п.4)
 
-**Обраний інструмент:** **Cursor (Business) з увімкненим Privacy Mode** — альтернатива:
-GitHub Copilot Business або Claude for Work з контрактом enterprise.
+**Обраний інструмент:** **Cursor Teams або Enterprise** (не «Cursor (Business)») з **team-wide Privacy Mode** для всіх 🟡-даних. Перед використанням мають бути підписані **DPA** і затверджені вимоги **data residency**. Альтернатива: GitHub Copilot Business або Claude for Work з контрактом enterprise.
 
 **Чому саме цей tier:**
 
 | Критерій | Як закриваємо |
 |---|---|
-| **No-train** | Privacy Mode / enterprise-угода: промпти з 🟡-контекстом не використовуються для тренування моделей постачальника. |
+| **No-train** | Team-wide Privacy Mode / enterprise-угода: промпти з 🟡-контекстом не використовуються для тренування моделей постачальника. |
 | **Enterprise** | Доступ лише для аутентифікованих учасників команди; аудит і політики від security, не consumer-акаунт. |
-| **Data residency** | Для payments-core пріоритет — регіон EU (або узгоджений з compliance); enterprise-tier дозволяє обмежити, де обробляється контекст. |
+| **Data residency** | DPA + узгоджений регіон (для payments-core — EU або інший, затверджений compliance) **до** передачі 🟡-даних; Teams/Enterprise дозволяє обмежити, де обробляється контекст. |
 
 **Приклад з нашого тікета:** після санітизації в промпт можна давати блок «Внутрішня логіка»
 (`FeeCalculator.applyTransferFee()`, `preAuthorize()` / `settle()`, гілка `feat/PSD2-fee-refactor`,

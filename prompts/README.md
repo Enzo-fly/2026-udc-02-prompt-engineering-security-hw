@@ -8,7 +8,7 @@
 1. Скопіюй `prompts/_template.md` → `prompts/<verb-object>.md`.
 2. Заповни блоки: Role / Goal / Context / Constraints / Acceptance / Output / Stop (+ markdown і XML).
 3. **Meta-prompting:** прогони через `prompts/meta-improve-prompt.md` перед першим виконанням.
-4. **Запусти на реальній цілі** в `app/` і постав **Verified** у файлі промпта.
+4. **Запусти на цілі з індексу** (колонка «Ціль» нижче) і постав **Verified** у файлі промпта. `app/` — лише для money-промптів (`money.ts` / `money.test.ts`); інші — на свій файл (`docs/…`, `prompts/…`), не на `app/` за замовчуванням.
 5. Найкорисніші підніми в `.cursor/commands/` — виклик через `/name`.
 
 ## Рекомендований ланцюжок (`app/`)

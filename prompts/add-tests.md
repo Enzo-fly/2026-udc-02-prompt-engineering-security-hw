@@ -23,17 +23,18 @@ Role: Senior TS test author in this repo (Node 22, vitest). You write precise, m
 Goal: Extend `app/src/money.test.ts` with edge-case coverage for `app/src/money.ts` — document expected behavior, not current bugs.
 Context:
 - Module: `app/src/money.ts` — integer-cent helpers: `formatCents`, `parseAmount`, `splitEvenly`, `applyDiscount`.
-- Existing: `app/src/money.test.ts` — 4 passing smoke tests; extend, do not remove.
+- Existing: `app/src/money.test.ts` — **inspect this file first**. Extend it; do not remove or rewrite existing `it` blocks. Do not assume a fixed count (e.g. “4 smoke tests”).
 - `splitEvenly` remainder rule: `base = floor(total/n)`, `rem = total % n`; first `rem` shares get `base+1`, rest get `base` (e.g. 100÷3 → [34,33,33]).
 - `applyDiscount`: `percent` must be 0–100 inclusive; out-of-range should throw.
 Constraints:
 - Edit ONLY `app/src/money.test.ts`. Do NOT change `money.ts`, `package.json`, or other files.
 - No new dependencies. No helper modules — inline test data only.
 - Keep vitest style: `describe`/`it`/`expect`, import from `./money.js`.
-- One scenario per `it`; do not duplicate existing smoke assertions.
+- One scenario per `it`; do not duplicate assertions already present in `money.test.ts`.
 - Synthetic amounts only — no secrets/PII.
 Acceptance criteria:
-- Add tests covering at least:
+- After reading `money.test.ts`, **add only cases from the list below that are not already covered**. Skip any scenario that already has an equivalent `it`. Do not remove existing tests.
+- Desired coverage (add a case only if missing):
   - `formatCents`: zero, negatives
   - `parseAmount`: single fractional digit, negatives, trimmed whitespace; invalid input throws matching `/Not a valid amount/`
   - `splitEvenly`: remainder distribution per rule above (assert exact array + sum === total), `n=1`, zero total
@@ -60,11 +61,14 @@ Edit only money.test.ts. Run npm test and npm run typecheck from app/ before
 finishing; both must exit 0.
 If all tests pass → done. If a test fails due to a production bug → do NOT weaken
 assertions or fix money.ts; stop and report per output_format.
+Inspect app/src/money.test.ts first; add only missing cases; do not duplicate
+or remove existing tests.
 </instructions>
 
 <context>
 Module: app/src/money.ts — formatCents, parseAmount, splitEvenly, applyDiscount.
-Tests: app/src/money.test.ts (4 smoke tests; extend, do not remove). Amounts are integer cents.
+Tests: app/src/money.test.ts — inspect current suite; extend only; do not
+assume a fixed count (e.g. 4 smoke tests). Amounts are integer cents.
 splitEvenly remainder rule: base=floor(total/n), rem=total%n; first rem shares get base+1,
 rest get base (e.g. 100÷3 → [34,33,33]).
 applyDiscount: percent 0–100 inclusive; out-of-range should throw.
@@ -72,10 +76,16 @@ applyDiscount: percent 0–100 inclusive; out-of-range should throw.
 
 <constraints>
 - Only app/src/money.test.ts may change. No new deps. No helper modules.
-- One scenario per it; do not duplicate smoke assertions.
+- One scenario per it; do not duplicate or remove existing tests.
+- Add only listed coverage items that are not already covered:
+  formatCents: zero, negatives;
+  parseAmount: one fractional digit, negatives, trimmed whitespace, invalid
+  input throws matching /Not a valid amount/;
+  splitEvenly: remainder distribution (exact array + sum === total), n=1,
+  zero total;
+  applyDiscount: 0% and 100% bounds, rounding to nearest cent, invalid
+  percent throws matching /percent/i.
 - Vitest describe/it/expect; import from ./money.js.
-- Invalid parseAmount → throw matching /Not a valid amount/.
-- Out-of-range applyDiscount percent → throw matching /percent/i.
 - Synthetic test data only — no secrets/PII.
 </constraints>
 

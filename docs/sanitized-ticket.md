@@ -44,9 +44,9 @@ for the WS2 sanitization exercise. Do NOT treat as real PII/secrets. Your task
 
 - телефон: **+380 00 000 00 00**
 
-- дата народження: **01.01.1980**
+- дата народження: **[DOB]**
 
-- картка: `****-1234` (Visa, exp 01/30, CVV [REDACTED])
+- картка: `****-1234` (Visa, exp [REDACTED], CVV [REDACTED])
 
 - IBAN: **<IBAN>**
 

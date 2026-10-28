@@ -12,22 +12,22 @@
 import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js";
 ```
 
-**Структура:** 4 блоки `describe`, **27** тест-кейсів `it`.
+**Структура:** 4 блоки `describe`, **30** тест-кейсів `it`.
 
 | Метрика | Значення |
 |---------|----------|
 | `describe` блоків | 4 |
-| `it` кейсів | 27 |
+| `it` кейсів | 30 |
 | Імпортованих функцій | 4 |
 
 ## Suite summary
 
 | `describe` блок | Функція під тестом | Кількість `it` | Тема |
 |-----------------|-------------------|----------------|------|
-| `formatCents` | `formatCents` | 3 | Форматування центів у рядок |
+| `formatCents` | `formatCents` | 4 | Форматування центів у рядок, валідація |
 | `parseAmount` | `parseAmount` | 5 | Парсинг рядка в центи, помилки |
-| `splitEvenly` | `splitEvenly` | 12 | Рівний поділ суми, остача, валідація |
-| `applyDiscount` | `applyDiscount` | 7 | Знижка, округлення, валідація `percent` |
+| `splitEvenly` | `splitEvenly` | 13 | Рівний поділ суми, остача, валідація |
+| `applyDiscount` | `applyDiscount` | 8 | Знижка, округлення, валідація `cents` і `percent` |
 
 ---
 
@@ -77,6 +77,29 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 | **Inputs** | `cents: number` = `-42800` |
 | **Assertion** | `expect(...).toBe(...)` |
 | **Expected** | `string` = `"-428.00"` |
+
+#### `rejects fractional cents`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `formatCents` |
+| **Setup** | none |
+
+**Assertion 1**
+
+| Поле | Значення |
+|------|----------|
+| **Inputs** | `cents: number` = `10.5` (у стрілковій функції) |
+| **Assertion** | `expect(() => ...).toThrow(...)` |
+| **Expected** | regex `/finite integer/i` |
+
+**Assertion 2**
+
+| Поле | Значення |
+|------|----------|
+| **Inputs** | `cents: number` = `-1.5` (у стрілковій функції) |
+| **Assertion** | `expect(() => ...).toThrow(...)` |
+| **Expected** | regex `/finite integer/i` |
 
 ---
 
@@ -233,6 +256,46 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 | **Assertion** | `expect(() => ...).toThrow(...)` |
 | **Expected** | regex `/non-negative/i` |
 
+#### `rejects fractional totalCents`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `splitEvenly` |
+| **Setup** | none |
+| **Inputs** | `totalCents: number` = `10.5`, `n: number` = `2` (у стрілковій функції) |
+| **Assertion** | `expect(() => ...).toThrow(...)` |
+| **Expected** | regex `/finite integer/i` |
+
+#### `rejects fractional n`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `splitEvenly` |
+| **Setup** | none |
+| **Inputs** | `totalCents: number` = `100`, `n: number` = `2.5` (у стрілковій функції) |
+| **Assertion** | `expect(() => ...).toThrow(...)` |
+| **Expected** | regex `/finite integer/i` |
+
+#### `rejects negative n`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `splitEvenly` |
+| **Setup** | none |
+| **Inputs** | `totalCents: number` = `100`, `n: number` = `-1` (у стрілковій функції) |
+| **Assertion** | `expect(() => ...).toThrow(...)` |
+| **Expected** | regex `/n must be non-negative/i` |
+
+#### `rejects non-numeric inputs`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `splitEvenly` |
+| **Setup** | none |
+| **Inputs** | 4 виклики у стрілкових функціях: `(NaN, 3)`, `(100, NaN)`, `(Infinity, 3)`, `(100, Infinity)` |
+| **Assertion** | `expect(() => ...).toThrow(...)` ×4 |
+| **Expected** | regex `/finite integer/i` |
+
 #### `parts sum to the original total for positive amounts`
 
 | Поле | Значення |
@@ -332,6 +395,29 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 | **Assertion** | `expect(() => ...).toThrow(...)` |
 | **Expected** | regex `/percent/i` |
 
+#### `rejects fractional cents`
+
+| Поле | Значення |
+|------|----------|
+| **Target** | `applyDiscount` |
+| **Setup** | none |
+
+**Assertion 1**
+
+| Поле | Значення |
+|------|----------|
+| **Inputs** | `cents: number` = `10.5`, `percent: number` = `10` (у стрілковій функції) |
+| **Assertion** | `expect(() => ...).toThrow(...)` |
+| **Expected** | regex `/finite integer/i` |
+
+**Assertion 2**
+
+| Поле | Значення |
+|------|----------|
+| **Inputs** | `cents: number` = `-1.5`, `percent: number` = `0` (у стрілковій функції) |
+| **Assertion** | `expect(() => ...).toThrow(...)` |
+| **Expected** | regex `/finite integer/i` |
+
 ---
 
 ## Assertion reference
@@ -342,7 +428,7 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 |--------|-------------------|---------------------------|
 | `toBe` | 14 | Строга рівність для примітивів (`number`, `string`) |
 | `toEqual` | 7 | Глибока рівність для масивів (`number[]`) |
-| `toThrow` | 11 | Виклик функції кидає помилку; усі 11 з regex-матчером повідомлення |
+| `toThrow` | 16 | Виклик функції кидає помилку; усі 16 з regex-матчером повідомлення |
 | `toHaveLength` | 1 | Перевірка довжини масиву (`parts`) |
 
 ## Comments in source

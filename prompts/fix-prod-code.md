@@ -92,4 +92,4 @@ other files/deps/API change needed → ask; still red after fix → list remaind
 ## Verified
 
 - [x] Run after `prompts/add-tests.md` when one or more tests fail (any subset)
-- [x] Agent stayed in scope; `npm test` fully green (27/27); tests untouched
+- [x] Agent stayed in scope; `npm test` + `typecheck` fully green (30/30, after adding `rejects negative n`); tests untouched

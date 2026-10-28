@@ -40,7 +40,7 @@
 | 🔴 Картка | Masking | `****-1234`; CVV → `[REDACTED]`; exp → `[REDACTED]` |
 | 🔴 IBAN / рахунок | Masking | `<IBAN>`; у логах `account=<IBAN>` |
 | 🔴 Баланс | Masking / redaction | `<BALANCE>` або `[REDACTED]` |
-| 🔴 ДН, паспорт, ІПН | Synthetic або redaction | `01.01.1980`, `ХХ 111111`, `[REDACTED]` |
+| 🔴 ДН, паспорт, ІПН | Synthetic або redaction | `[DOB]` / `01.01.1980`, `ХХ 111111`, `[REDACTED]` |
 | 🔴 Суми в логах (якщо не потрібні) | Masking | `amount=хххх.00` — залишити лише поля, важливі для бага |
 | 🔴 Секрети | **Out-of-band** | `<SECRET_OUT_OF_BAND>` у тексті; значення — лише в vault / `.env` (не в промпт) |
 | 🔴 Production dump | Redaction | прибрати рядки з credentials; залишити структуру події |
@@ -79,7 +79,7 @@
 
 ### Рішення для 🟡-даних (Task B, п.4)
 
-**Обраний інструмент:** **Cursor Teams або Enterprise** (не «Cursor (Business)») з **team-wide Privacy Mode** для всіх 🟡-даних. Перед використанням мають бути підписані **DPA** і затверджені вимоги **data residency**. Альтернатива: GitHub Copilot Business або Claude for Work з контрактом enterprise.
+**Обраний інструмент:** **Cursor Teams або Enterprise** (не «Cursor (Business)») з **team-wide Privacy Mode** для всіх 🟡-даних; якщо потрібна **data residency** — лише **Cursor Enterprise**. Перед використанням має бути підписаний **DPA**. Альтернатива: GitHub Copilot Business або Claude for Work з контрактом enterprise.
 
 **Чому саме цей tier:**
 
@@ -87,7 +87,7 @@
 |---|---|
 | **No-train** | Team-wide Privacy Mode / enterprise-угода: промпти з 🟡-контекстом не використовуються для тренування моделей постачальника. |
 | **Enterprise** | Доступ лише для аутентифікованих учасників команди; аудит і політики від security, не consumer-акаунт. |
-| **Data residency** | DPA + узгоджений регіон (для payments-core — EU або інший, затверджений compliance) **до** передачі 🟡-даних; Teams/Enterprise дозволяє обмежити, де обробляється контекст. |
+| **Data residency** | Якщо residency обов'язкова — лише **Cursor Enterprise** (Teams її не гарантує). Перед передачею 🟡-даних: DPA + підтвердити з постачальником регіон, які етапи обробки він покриває (inference / зберігання / логи), які моделі й функції доступні в цьому режимі. Регіональне покриття може бути частковим (напр. лише inference і за запитом) — фіксуємо обмеження письмово. |
 
 **Приклад з нашого тікета:** після санітизації в промпт можна давати блок «Внутрішня логіка»
 (`FeeCalculator.applyTransferFee()`, `preAuthorize()` / `settle()`, гілка `feat/PSD2-fee-refactor`,

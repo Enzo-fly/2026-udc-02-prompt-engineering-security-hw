@@ -16,10 +16,10 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 
 | Функція | Параметри | Повертає | Кидає помилку |
 |---------|-----------|----------|---------------|
-| `formatCents` | `cents: number` | `string` | Ні |
+| `formatCents` | `cents: number` | `string` | Так — нецілий або нефінітний `cents` |
 | `parseAmount` | `input: string` | `number` | Так — невалідний рядок |
-| `splitEvenly` | `totalCents: number`, `n: number` | `number[]` | Так — нецілий або нефінітний `totalCents`/`n`; від'ємний `totalCents` |
-| `applyDiscount` | `cents: number`, `percent: number` | `number` | Так — `percent` поза 0–100, `NaN` або нескінченний |
+| `splitEvenly` | `totalCents: number`, `n: number` | `number[]` | Так — нецілий або нефінітний `totalCents`/`n`; від'ємний `totalCents` або `n` |
+| `applyDiscount` | `cents: number`, `percent: number` | `number` | Так — нецілий або нефінітний `cents`; `percent` поза 0–100, `NaN` або нескінченний |
 
 ---
 
@@ -35,7 +35,7 @@ export function formatCents(cents: number): string
 
 | Параметр | Тип | Опис |
 |----------|-----|------|
-| `cents` | `number` | Сума в цілих центах (може бути від'ємною). |
+| `cents` | `number` | Сума в цілих центах (скінченне ціле; може бути від'ємною). |
 
 **Returns**
 
@@ -45,10 +45,11 @@ export function formatCents(cents: number): string
 
 **Throws**
 
-Не кидає помилок.
+- Якщо `cents` не є скінченним цілим (`Number.isInteger` = false, зокрема дробові, `NaN`, `Infinity`): `Error` з повідомленням `` `cents must be a finite integer, got ${cents}` ``.
 
 **Behavior**
 
+- Спочатку: `cents` має бути скінченним цілим.
 - Для від'ємних значень на початок рядка додається `"-"`.
 - Береться модуль `Math.abs(cents)`.
 - Ціла частина: `Math.floor(abs / 100)`.
@@ -115,7 +116,7 @@ export function splitEvenly(totalCents: number, n: number): number[]
 | Параметр | Тип | Опис |
 |----------|-----|------|
 | `totalCents` | `number` | Загальна сума в центах для розподілу (невід'ємна). |
-| `n` | `number` | Кількість часток (людей); довжина результуючого масиву. |
+| `n` | `number` | Кількість часток (людей; невід'ємне ціле); довжина результуючого масиву. `0` → `[]`. |
 
 **Returns**
 
@@ -128,10 +129,11 @@ export function splitEvenly(totalCents: number, n: number): number[]
 - Якщо `totalCents` не є скінченним цілим (`Number.isInteger` = false, зокрема дробові, `NaN`, `Infinity`): `Error` з повідомленням `` `totalCents must be a finite integer, got ${totalCents}` ``.
 - Якщо `n` не є скінченним цілим (зокрема дробові, `NaN`, `Infinity`): `Error` з повідомленням `` `n must be a finite integer, got ${n}` ``.
 - Якщо `totalCents < 0`: `Error` з повідомленням `` `totalCents must be non-negative, got ${totalCents}` ``.
+- Якщо `n < 0`: `Error` з повідомленням `` `n must be non-negative, got ${n}` ``.
 
 **Behavior**
 
-- Спочатку: `totalCents` і `n` мають бути скінченними цілими; потім `totalCents` — невід'ємним.
+- Спочатку: `totalCents` і `n` мають бути скінченними цілими; потім `totalCents` і `n` — невід'ємними.
 - `base = Math.floor(totalCents / n)`.
 - `remainder = totalCents % n`.
 - Повертається масив довжини `n`: для індексів `i < remainder` значення `base + 1`, інакше `base` — залишок розподіляється на перші `remainder` часток.
@@ -156,7 +158,7 @@ export function applyDiscount(cents: number, percent: number): number
 
 | Параметр | Тип | Опис |
 |----------|-----|------|
-| `cents` | `number` | Початкова сума в центах. |
+| `cents` | `number` | Початкова сума в центах (скінченне ціле). |
 | `percent` | `number` | Відсоток знижки; за JSDoc — діапазон **0–100** включно. |
 
 **Returns**
@@ -167,12 +169,13 @@ export function applyDiscount(cents: number, percent: number): number
 
 **Throws**
 
+- Якщо `cents` не є скінченним цілим (зокрема дробові, `NaN`, `Infinity`): `Error` з повідомленням `` `cents must be a finite integer, got ${cents}` ``.
 - Якщо `percent < 0` або `percent > 100`: `Error` з повідомленням `` `percent must be between 0 and 100, got ${percent}` ``.
 - Якщо `percent` є `NaN` або нескінченним (`!Number.isFinite(percent)`): те саме повідомлення `` `percent must be between 0 and 100, got ${percent}` ``.
 
 **Behavior**
 
-- Спочатку перевірка діапазону `percent` (скінченне число 0–100 включно).
+- Спочатку перевірка `cents` (скінченне ціле), потім діапазону `percent` (скінченне число 0–100 включно).
 - Обчислення: `Math.round(cents * (1 - percent / 100))`.
 - `0%` повертає початкову суму (округлену); `100%` дає `0` для додатних `cents` (implementation detail).
 
@@ -188,10 +191,12 @@ export function applyDiscount(cents: number, percent: number): number
 
 | Повідомлення | Функція | Умова |
 |--------------|---------|--------|
+| `` cents must be a finite integer, got ${cents} `` | `formatCents`, `applyDiscount` | `cents` не скінченне ціле (дробове, `NaN`, `Infinity`) |
 | `` Not a valid amount: ${input} `` | `parseAmount` | Рядок не збігається з `/^(-?)(\d+)(?:\.(\d{1,2}))?$/` після `trim` |
 | `` totalCents must be a finite integer, got ${totalCents} `` | `splitEvenly` | `totalCents` не скінченне ціле (дробове, `NaN`, `Infinity`) |
 | `` n must be a finite integer, got ${n} `` | `splitEvenly` | `n` не скінченне ціле (дробове, `NaN`, `Infinity`) |
 | `` totalCents must be non-negative, got ${totalCents} `` | `splitEvenly` | `totalCents < 0` |
+| `` n must be non-negative, got ${n} `` | `splitEvenly` | `n < 0` |
 | `` percent must be between 0 and 100, got ${percent} `` | `applyDiscount` | `percent < 0` або `percent > 100`, або `percent` є `NaN` / нескінченним |
 
 ## Types & conventions

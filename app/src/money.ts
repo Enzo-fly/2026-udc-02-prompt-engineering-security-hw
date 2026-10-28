@@ -11,8 +11,9 @@
 /**
  * Format integer cents as a human-readable decimal string.
  *
- * @param cents - Amount in whole cents (may be negative).
+ * @param cents - Amount in whole cents (finite integer; may be negative).
  * @returns String `"<whole>.<two-digit-cents>"`, with a leading `-` when negative.
+ * @throws {Error} `cents must be a finite integer, got ${cents}` when `cents` is not a finite integer.
  * @example
  * formatCents(42800); // => "428.00"
  * @example
@@ -23,6 +24,9 @@
  * formatCents(0); // => "0.00"
  */
 export function formatCents(cents: number): string {
+  if (!Number.isInteger(cents)) {
+    throw new Error(`cents must be a finite integer, got ${cents}`);
+  }
   const sign = cents < 0 ? "-" : "";
   const abs = Math.abs(cents);
   const whole = Math.floor(abs / 100);
@@ -62,11 +66,12 @@ export function parseAmount(input: string): number {
  * When `n` is `0`, returns `[]` and that sum guarantee does not apply.
  *
  * @param totalCents - Total amount in cents to distribute (non-negative finite integer).
- * @param n - Number of shares (length of the returned array); `0` yields `[]`.
+ * @param n - Number of shares (non-negative integer; length of the returned array); `0` yields `[]`.
  * @returns Array of `n` integer-cent values (`[]` when `n` is `0`).
  * @throws {Error} `totalCents must be a finite integer, got ${totalCents}` when `totalCents` is not a finite integer.
  * @throws {Error} `n must be a finite integer, got ${n}` when `n` is not a finite integer.
  * @throws {Error} `totalCents must be non-negative, got ${totalCents}` when `totalCents` is negative.
+ * @throws {Error} `n must be non-negative, got ${n}` when `n` is negative.
  * @example
  * splitEvenly(100, 3); // => [34, 33, 33]
  * @example
@@ -82,6 +87,9 @@ export function splitEvenly(totalCents: number, n: number): number[] {
   if (totalCents < 0) {
     throw new Error(`totalCents must be non-negative, got ${totalCents}`);
   }
+  if (n < 0) {
+    throw new Error(`n must be non-negative, got ${n}`);
+  }
   const base = Math.floor(totalCents / n);
   const remainder = totalCents % n;
   return Array.from({ length: n }, (_, i) => base + (i < remainder ? 1 : 0));
@@ -90,14 +98,18 @@ export function splitEvenly(totalCents: number, n: number): number[] {
 /**
  * Apply a percentage discount to an amount in cents.
  *
- * @param cents - Original amount in cents.
+ * @param cents - Original amount in cents (finite integer).
  * @param percent - Discount percentage from 0 to 100 inclusive.
  * @returns Discounted amount in cents, rounded to the nearest cent.
+ * @throws {Error} `cents must be a finite integer, got ${cents}` when `cents` is not a finite integer.
  * @throws {Error} `percent must be between 0 and 100, got ${percent}` when `percent` is out of range.
  * @example
  * applyDiscount(10000, 10); // => 9000
  */
 export function applyDiscount(cents: number, percent: number): number {
+  if (!Number.isInteger(cents)) {
+    throw new Error(`cents must be a finite integer, got ${cents}`);
+  }
   if (!Number.isFinite(percent) || percent < 0 || percent > 100) {
     throw new Error(`percent must be between 0 and 100, got ${percent}`);
   }

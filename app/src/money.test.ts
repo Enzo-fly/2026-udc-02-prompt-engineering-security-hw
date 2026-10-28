@@ -18,6 +18,11 @@ describe("formatCents", () => {
   it("formats negative amounts", () => {
     expect(formatCents(-42800)).toBe("-428.00");
   });
+
+  it("rejects fractional cents", () => {
+    expect(() => formatCents(10.5)).toThrow(/finite integer/i);
+    expect(() => formatCents(-1.5)).toThrow(/finite integer/i);
+  });
 });
 
 describe("parseAmount", () => {
@@ -85,6 +90,10 @@ describe("splitEvenly", () => {
     expect(() => splitEvenly(100, 2.5)).toThrow(/finite integer/i);
   });
 
+  it("rejects negative n", () => {
+    expect(() => splitEvenly(100, -1)).toThrow(/n must be non-negative/i);
+  });
+
   it("rejects non-numeric inputs", () => {
     expect(() => splitEvenly(Number.NaN, 3)).toThrow(/finite integer/i);
     expect(() => splitEvenly(100, Number.NaN)).toThrow(/finite integer/i);
@@ -128,5 +137,10 @@ describe("applyDiscount", () => {
 
   it("rejects non-finite percent", () => {
     expect(() => applyDiscount(10000, NaN)).toThrow(/percent/i);
+  });
+
+  it("rejects fractional cents", () => {
+    expect(() => applyDiscount(10.5, 10)).toThrow(/finite integer/i);
+    expect(() => applyDiscount(-1.5, 0)).toThrow(/finite integer/i);
   });
 });

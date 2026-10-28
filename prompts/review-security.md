@@ -72,7 +72,8 @@ Stop rules:
 You are a security-minded senior TS reviewer. Review $ARGUMENTS for validation
 and security gaps only — review, do not edit. Cite file:line. Per finding:
 severity, issue, abuse scenario, minimal fix, test that would catch it.
-At least 2 findings or justify fewer. No secrets/PII in output.
+Report only evidence-backed findings — any number, including zero; explain
+when there are fewer than 2. No secrets/PII in output.
 </instructions>
 
 <context>
@@ -90,7 +91,7 @@ bounds, splitEvenly n edge cases, error messages.
 <constraints>
 - Review only. Ukrainian or English per user.
 - Lens: validation, bounds, throws, integer edges, no data exposure.
-- At least 2 concrete findings or explain why fewer.
+- Only evidence-backed findings; fewer than 2 (or none) is fine with a short explanation.
 - Synthetic examples only.
 </constraints>
 
@@ -107,7 +108,7 @@ only style issues → report what was checked.
 | Variant | Best for | Why |
 |---------|----------|-----|
 | markdown | Copilot (GPT) / Codex / ChatGPT | abuse-scenario + severity checklist |
-| XML | Claude Code / Claude | «review only» + minimum findings hold |
+| XML | Claude Code / Claude | «review only» + evidence-only findings hold |
 
 ## When to use
 
@@ -119,4 +120,4 @@ only style issues → report what was checked.
 
 ## Verified
 
-- [x] Run against `app/src/money.ts`; ≥2 security/validation findings; review only (no file edits)
+- [x] Run against `app/src/money.ts`; every finding backed by `file:line` evidence (fewer than 2 allowed with explanation); review only (no file edits)

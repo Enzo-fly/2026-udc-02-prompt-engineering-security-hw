@@ -361,9 +361,9 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 |------|----------|
 | **Target** | `applyDiscount` |
 | **Setup** | none |
-| **Inputs** | `cents: number` = `99`, `percent: number` = `10` |
+| **Inputs** | `cents: number` = `95`, `percent: number` = `10` (сире значення `85.5` — відрізняє `Math.round` від `Math.floor`) |
 | **Assertion** | `expect(...).toBe(...)` |
-| **Expected** | `number` = `89` |
+| **Expected** | `number` = `86` |
 
 #### `rejects negative percent`
 

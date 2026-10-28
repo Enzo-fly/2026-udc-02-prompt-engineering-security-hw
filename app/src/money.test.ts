@@ -123,7 +123,7 @@ describe("applyDiscount", () => {
   });
 
   it("rounds to the nearest cent", () => {
-    expect(applyDiscount(99, 10)).toBe(89);
+    expect(applyDiscount(95, 10)).toBe(86);
   });
 
   it("rejects negative percent", () => {

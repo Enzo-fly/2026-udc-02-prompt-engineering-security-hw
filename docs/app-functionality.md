@@ -134,9 +134,11 @@ export function splitEvenly(totalCents: number, n: number): number[]
 **Behavior**
 
 - Спочатку: `totalCents` і `n` мають бути скінченними цілими; потім `totalCents` і `n` — невід'ємними.
-- `base = Math.floor(totalCents / n)`.
-- `remainder = totalCents % n`.
-- Повертається масив довжини `n`: для індексів `i < remainder` значення `base + 1`, інакше `base` — залишок розподіляється на перші `remainder` часток.
+- Якщо `n === 0`: повертається `[]` (гарантія «сума часток = `totalCents`» не діє).
+- Якщо `n > 0`:
+  - `base = Math.floor(totalCents / n)`;
+  - `remainder = totalCents % n`;
+  - повертається масив довжини `n`: для індексів `i < remainder` значення `base + 1`, інакше `base` — залишок розподіляється на перші `remainder` часток.
 
 **Examples**
 

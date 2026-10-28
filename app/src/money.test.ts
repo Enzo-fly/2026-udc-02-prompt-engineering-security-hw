@@ -1,9 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js";
 
-// Minimal smoke tests — they pass. The cookbook "add tests" prompt should ADD
-// the edge cases these intentionally skip (remainder cents, negatives, bad input,
-// out-of-range discount).
+// Smoke tests plus edge cases added via the cookbook "add tests" prompt:
+// remainder cents, negatives, invalid/non-integer input, out-of-range discount.
 
 describe("formatCents", () => {
   it("formats whole and fractional", () => {

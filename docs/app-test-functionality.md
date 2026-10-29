@@ -433,13 +433,12 @@ import { formatCents, parseAmount, splitEvenly, applyDiscount } from "./money.js
 
 ## Comments in source
 
-З файлу `money.test.ts` (рядки 4–6):
+З файлу `money.test.ts` (рядки 4–5):
 
-> Minimal smoke tests — they pass. The cookbook "add tests" prompt should ADD  
-> the edge cases these intentionally skip (remainder cents, negatives, bad input,  
-> out-of-range discount).
+> Smoke tests plus edge cases added via the cookbook "add tests" prompt:  
+> remainder cents, negatives, invalid/non-integer input, out-of-range discount.
 
-*(Примітка: у поточному файлі edge cases для remainder cents, negatives, bad input та out-of-range discount уже присутні в окремих `it` — коментар відображає початковий задум репозиторію.)*
+*(Примітка: коментар описує фактичне покриття — edge cases для remainder cents, negatives, invalid/non-integer input та out-of-range discount присутні в окремих `it`. Початковий коментар стартового репо «Minimal smoke tests… should ADD the edge cases» замінено, бо він більше не відповідав файлу.)*
 
 ## Generated
 
